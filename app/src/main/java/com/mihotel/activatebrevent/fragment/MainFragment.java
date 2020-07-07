@@ -98,7 +98,7 @@ public class MainFragment extends PreferenceFragmentCompat {
                 if (0 == ShizukuShellResult.exitCode) {
                     OpUtil.showToast0(context, R.string.activate_success);
                 } else {
-                    if ("sh: /data/data/me.piebridge.brevent/brevent.sh: No such file or directory".equals(ShizukuShellResult.err)) {
+                    if ("sh: /data/data/me.piebridge.brevent/brevent.sh: No such file or directory".equals(ShizukuShellResult.err)||"sh: /data/data/me.piebridge.brevent/brevent.sh: Permission denied".equals(ShizukuShellResult.err)) {
                         OpUtil.showToast1(context, "请在黑阈内打开提示启动服务的界面后再尝试激活");
                     } else {
                         OpUtil.showToast1(context, String.format(getString(R.string.activate_fail), ShizukuShellResult.err));
