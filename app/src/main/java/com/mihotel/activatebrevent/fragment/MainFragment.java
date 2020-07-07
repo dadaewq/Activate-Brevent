@@ -98,7 +98,11 @@ public class MainFragment extends PreferenceFragmentCompat {
                 if (0 == ShizukuShellResult.exitCode) {
                     OpUtil.showToast0(context, R.string.activate_success);
                 } else {
-                    OpUtil.showToast1(context, String.format(getString(R.string.activate_fail), ShizukuShellResult.err));
+                    if ("sh: /data/data/me.piebridge.brevent/brevent.sh: No such file or directory".equals(ShizukuShellResult.err)) {
+                        OpUtil.showToast1(context, "请在黑阈内打开提示启动服务的界面后再尝试激活");
+                    } else {
+                        OpUtil.showToast1(context, String.format(getString(R.string.activate_fail), ShizukuShellResult.err));
+                    }
                 }
 
 
@@ -167,6 +171,10 @@ public class MainFragment extends PreferenceFragmentCompat {
             if (isShizukuRunningService) {
                 if (hasPermission) {
                     avShizukuPreference.setSummary(getString(R.string.summary_av_no) + getString(R.string.unknown));
+                    avShizukuPreference.setOnPreferenceClickListener(preference -> {
+                        click2activate.setEnabled(true);
+                        return true;
+                    });
                 } else {
                     if (isShizukuExist) {
                         avShizukuPreference.setOnPreferenceClickListener(preference -> {
