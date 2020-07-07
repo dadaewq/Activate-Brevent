@@ -11,7 +11,7 @@
     <string name="title_installer_available_state">Shizuku可用状态</string>
     <string name="title_shizuku_service_state">Shizuku服务状态</string>
     <string name="title_shizuku_authorization_state">Shizuku授权状态</string>
-    <string name="unknown">未知。\n可点击我后尝试激活黑阈</string>
+    <string name="unknown">未知。\n可能无法正常激活黑阈</string>
     <string name="click2activate">点击激活黑阈</string>
     <string name="activate_success">执行成功，请前往黑阈查看</string>
     <string name="activate_fail">执行失败,错误：\n%s</string>

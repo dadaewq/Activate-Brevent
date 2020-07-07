@@ -88,27 +88,7 @@ public class MainFragment extends PreferenceFragmentCompat {
 
         assert click2activate != null;
         click2activate.setOnPreferenceClickListener(preference -> {
-            try {
-                Shell.Result ShizukuShellResult;
-
-                ShizukuShellResult = ShizukuShell.getInstance().exec(new Shell.Command("sh", OpUtil.BREVENT_SH));
-
-                Log.e("Result", ShizukuShellResult.toString());
-
-                if (0 == ShizukuShellResult.exitCode) {
-                    OpUtil.showToast0(context, R.string.activate_success);
-                } else {
-                    if ("sh: /data/data/me.piebridge.brevent/brevent.sh: No such file or directory".equals(ShizukuShellResult.err)||"sh: /data/data/me.piebridge.brevent/brevent.sh: Permission denied".equals(ShizukuShellResult.err)) {
-                        OpUtil.showToast1(context, "请在黑阈内打开提示启动服务的界面后再尝试激活");
-                    } else {
-                        OpUtil.showToast1(context, String.format(getString(R.string.activate_fail), ShizukuShellResult.err));
-                    }
-                }
-
-
-            } catch (Exception e) {
-                OpUtil.showToast0(context, e + "");
-            }
+            execShizukuShell(OpUtil.BREVENT_SH);
             return true;
         });
 
@@ -127,7 +107,33 @@ public class MainFragment extends PreferenceFragmentCompat {
     }
 
 
-    private void refreshInstallerStatus() {
+    private void execShizukuShell(String shPath) {
+        try {
+            Shell.Result ShizukuShellResult;
+
+            ShizukuShellResult = ShizukuShell.getInstance().exec(new Shell.Command("sh", shPath));
+
+            Log.e("Result", ShizukuShellResult.toString());
+
+            if (0 == ShizukuShellResult.exitCode) {
+                OpUtil.showToast0(context, R.string.activate_success);
+            } else {
+                if ("sh: /data/data/me.piebridge.brevent/brevent.sh: No such file or directory".equals(ShizukuShellResult.err) ||
+                        "sh: /data/data/me.piebridge.brevent/brevent.sh: Permission denied".equals(ShizukuShellResult.err) ||
+                        "ERROR: please open Brevent to make a new brevent.sh".equals(ShizukuShellResult.err)) {
+                    OpUtil.showToast1(context, "请在黑阈内打开提示启动服务的界面后再尝试激活");
+
+                } else {
+                    OpUtil.showToast1(context, String.format(getString(R.string.activate_fail), ShizukuShellResult.err));
+                }
+            }
+
+        } catch (Exception e) {
+            OpUtil.showToast0(context, e + "");
+        }
+    }
+
+    private void refreshStatus() {
 
         Intent launchShizujuIntent = context.getPackageManager().getLaunchIntentForPackage(OpUtil.SHIZUKU_PACKAGENAME);
 
@@ -171,10 +177,7 @@ public class MainFragment extends PreferenceFragmentCompat {
             if (isShizukuRunningService) {
                 if (hasPermission) {
                     avShizukuPreference.setSummary(getString(R.string.summary_av_no) + getString(R.string.unknown));
-                    avShizukuPreference.setOnPreferenceClickListener(preference -> {
-                        click2activate.setEnabled(true);
-                        return true;
-                    });
+                    click2activate.setEnabled(true);
                 } else {
                     if (isShizukuExist) {
                         avShizukuPreference.setOnPreferenceClickListener(preference -> {
@@ -208,9 +211,34 @@ public class MainFragment extends PreferenceFragmentCompat {
         }
     }
 
-    private void refreshStatus() {
-        refreshInstallerStatus();
-    }
+//    private void refreshRawStatus() {
+//        if (!isShExist()) {
+//            try {
+//                InputStream inputStream = context.getResources().openRawResource(R.raw.brevent);
+//                File file = new File(getShPath());
+//                FileOutputStream fos = new FileOutputStream(file);
+//                byte[] buffer = new byte[inputStream.available()];
+//                int lenght = 0;
+//                while ((lenght = inputStream.read(buffer)) != -1) {
+//                    fos.write(buffer, 0, lenght);
+//                    fos.flush();
+//                    fos.close();
+//                    inputStream.close();
+//                }
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//
+//        }
+//    }
+
+//    private String getShPath() {
+//        return context.getFilesDir().getAbsolutePath() + File.separator + "brevent.sh";
+//    }
+//
+//    private boolean isShExist() {
+//        return new File(getShPath()).exists();
+//    }
 
     private static class MyHandler extends Handler {
 
