@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">激活黑阈</string>
+    <string name="click2requestpermission">点击申请权限</string>
+    <string name="summary_permission_no">未授权！</string>
+    <string name="summary_permission_yes">已授权</string>
+    <string name="summary_av_no">不可用！</string>
+    <string name="summary_av_yes">可用</string>
+    <string name="summary_av_ok_installer">现在可以使用</string>
+    <string name="summary_check_shizuku_service">检查Shizuku服务</string>
+    <string name="summary_go_shizuku">点击前往Shizuku检查</string>
+    <string name="title_installer_available_state">Shizuku可用状态</string>
+    <string name="title_shizuku_service_state">Shizuku服务状态</string>
+    <string name="title_shizuku_authorization_state">Shizuku授权状态</string>
+    <string name="unknown">未知</string>
+    <string name="click2activate">点击激活黑阈</string>
+    <string name="activate_success">执行成功，请前往黑阈查看</string>
+    <string name="activate_fail">执行失败,错误：\n%s</string>
+    <string name="title_activatewtihshizuku">用Shizuku激活</string>
+</resources>
