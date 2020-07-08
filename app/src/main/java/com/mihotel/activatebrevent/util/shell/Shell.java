@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 
 import androidx.annotation.NonNull;
 
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -12,11 +11,7 @@ public interface Shell {
 
     boolean isAvailable();
 
-    Result exec(Command command);
-
-    Result exec(Command command, InputStream inputPipe);
-
-    String makeLiteral(String arg);
+    Result exec(String... command);
 
     class Command {
         private final ArrayList<String> mArgs = new ArrayList<>();
@@ -74,9 +69,9 @@ public interface Shell {
         public final int exitCode;
         public final String out;
         public final String err;
-        final Command cmd;
+        final String cmd;
 
-        Result(Command cmd, int exitCode, String out, String err) {
+        Result(String cmd, int exitCode, String out, String err) {
             this.cmd = cmd;
             this.exitCode = exitCode;
             this.out = out;

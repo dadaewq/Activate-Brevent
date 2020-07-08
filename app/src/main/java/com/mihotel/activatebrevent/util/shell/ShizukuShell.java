@@ -3,18 +3,15 @@ package com.mihotel.activatebrevent.util.shell;
 import android.os.Build;
 import android.util.Log;
 
-import androidx.annotation.Nullable;
-
 import com.mihotel.activatebrevent.util.IOUtils;
 
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.util.Arrays;
 
 import moe.shizuku.api.RemoteProcess;
 import moe.shizuku.api.ShizukuService;
 
 public class ShizukuShell implements Shell {
-    private static final String TAG = "ShizukuShell";
+    private static final String TAG = "ShizukuShell2";
 
     private static ShizukuShell sInstance;
 
@@ -33,9 +30,8 @@ public class ShizukuShell implements Shell {
         if (!ShizukuService.pingBinder()) {
             return false;
         }
-
         try {
-            return exec(new Command("echo", "test")).isSuccessful();
+            return exec("echo", "test").isSuccessful();
         } catch (Exception e) {
             Log.w(TAG, "Unable to access shizuku: ");
             Log.w(TAG, e);
@@ -44,46 +40,24 @@ public class ShizukuShell implements Shell {
     }
 
     @Override
-    public Result exec(Command command) {
-        return execInternal(command, null);
+    public Result exec(String... command) {
+        return execInternal(command);
     }
 
-    @Override
-    public Result exec(Command command, InputStream inputPipe) {
-        return execInternal(command, inputPipe);
-    }
-
-    @Override
-    public String makeLiteral(String arg) {
-        return "'" + arg.replace("'", "'\\''") + "'";
-    }
-
-    private Result execInternal(Command command, @Nullable InputStream inputPipe) {
+    private Result execInternal(String... command) {
 
         StringBuilder stdOutSb = new StringBuilder();
         StringBuilder stdErrSb = new StringBuilder();
 
         try {
-            RemoteProcess process = ShizukuService.newProcess(new String[]{"sh"}, null, null);
+            RemoteProcess process = ShizukuService.newProcess(command, null, null);
             Thread stdOutD = IOUtils.writeStreamToStringBuilder(stdOutSb, process.getInputStream());
             Thread stdErrD = IOUtils.writeStreamToStringBuilder(stdErrSb, process.getErrorStream());
-            OutputStream outputStream = process.getOutputStream();
-            outputStream.write(command.toString().getBytes());
-            outputStream.flush();
-
-            if (inputPipe != null && process.alive()) {
-                try (InputStream inputStream = inputPipe) {
-                    IOUtils.copyStream(inputStream, outputStream);
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
-            }
-
-            outputStream.close();
 
             process.waitFor();
             stdOutD.join();
             stdErrD.join();
+
             int exitValue = process.exitValue();
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -92,11 +66,11 @@ public class ShizukuShell implements Shell {
                 process.destroy();
             }
 
-            return new Result(command, exitValue, stdOutSb.toString().trim(), stdErrSb.toString().trim());
+            return new Result(Arrays.toString(command), exitValue, stdOutSb.toString().trim(), stdErrSb.toString().trim());
         } catch (Exception e) {
             Log.w(TAG, "Unable execute command: ");
             Log.w(TAG, e);
-            return new Result(command, -1, "", "\n\n<!> SAI ShizukuShell Java exception: " + IOUtils.throwableToString(e));
+            return new Result(Arrays.toString(command), -1, "", "\nShizukuShell exception: " + IOUtils.throwableToString(e));
         }
     }
 }

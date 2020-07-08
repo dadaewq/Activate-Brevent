@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">激活黑阈</string>
+    <string name="app_name">用Shizuku激活</string>
     <string name="click2requestpermission">点击申请权限</string>
     <string name="summary_permission_no">未授权！</string>
     <string name="summary_permission_yes">已授权</string>
@@ -11,9 +11,14 @@
     <string name="title_installer_available_state">Shizuku可用状态</string>
     <string name="title_shizuku_service_state">Shizuku服务状态</string>
     <string name="title_shizuku_authorization_state">Shizuku授权状态</string>
-    <string name="unknown">未知。\n可能无法正常激活黑阈</string>
-    <string name="click2activate">点击激活黑阈</string>
-    <string name="activate_success">执行成功，请前往黑阈查看</string>
+    <string name="unknown">未知。\n无法使用激活</string>
+    <string name="activate_brevent">激活黑阈</string>
+    <string name="activate_icebox">激活冰箱-普通ADB</string>
+    <string name="activate_stopapp">激活小黑屋-麦克斯韦妖</string>
+    <string name="activate_permissiondog">激活权限狗-麦克斯韦妖</string>
+    <string name="activate_brevent_success">执行成功，请前往黑阈查看</string>
+    <string name="activate_icebox_success">执行成功，请前往冰箱查看</string>
+    <string name="activate_stopapp_success">执行成功，请前往小黑屋查看</string>
+    <string name="activate_permissiondog_success">执行成功，请前往权限狗查看</string>
     <string name="activate_fail">执行失败,错误：\n%s</string>
-    <string name="title_activatewtihshizuku">用Shizuku激活</string>
 </resources>

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Activate Brevent</string>
+    <string name="app_name">Activate with Shizuku</string>
     <string name="click2requestpermission">Click to request permissions</string>
     <string name="summary_permission_no">Unauthorized！</string>
     <string name="summary_permission_yes">Authorized</string>
@@ -11,9 +11,14 @@
     <string name="title_installer_available_state">Shizuku available state</string>
     <string name="title_shizuku_service_state">Shizuku service state</string>
     <string name="title_shizuku_authorization_state">Shizuku authorization state</string>
-    <string name="unknown">Unknown</string>
-    <string name="click2activate">Click to activate Brevent</string>
-    <string name="activate_success">Execution succeed, please go to Brevent to check</string>
+    <string name="unknown">Unknown.\nUnable to use activation</string>
+    <string name="activate_brevent">Activate Brevent</string>
+    <string name="activate_icebox">Activate IceBox-Simple ADB</string>
+    <string name="activate_stopapp">Activate 小黑屋-麦克斯韦妖</string>
+    <string name="activate_permissiondog">Activate 权限狗-麦克斯韦妖</string>
+    <string name="activate_brevent_success">Execution succeed, please go to Brevent to check</string>
+    <string name="activate_icebox_success">Execution succeed, please go to IceBox to check</string>
+    <string name="activate_stopapp_success">Execution succeed, please go to 小黑屋 to check</string>
+    <string name="activate_permissiondog_success">Execution succeed, please go to 权限狗 to check</string>
     <string name="activate_fail">Execution failed, error：\n%s</string>
-    <string name="title_activatewtihshizuku">Activate with Shizuku</string>
 </resources>

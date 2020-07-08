@@ -13,6 +13,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
+import androidx.preference.PreferenceManager;
 
 import com.mihotel.activatebrevent.R;
 import com.mihotel.activatebrevent.util.OpUtil;
@@ -32,8 +33,9 @@ import moe.shizuku.api.ShizukuService;
 public class MainFragment extends PreferenceFragmentCompat {
 
     private static final int REQUEST_CODE = 2333;
-
-    private Preference click2activate;
+    private final String[] prefStr = new String[]{"activate_brevent", "activate_icebox", "activate_stopapp", "activate_permissiondog"};
+    private Preference[] Preferences;
+    private Preference activate_brevent, activate_icebox, activate_stopapp, activate_permissiondog;
     private Preference shizuku_service;
     private Preference shizuku_permission;
     private Preference avShizukuPreference;
@@ -80,17 +82,106 @@ public class MainFragment extends PreferenceFragmentCompat {
     }
 
 
+    private String getSh(int index) {
+        String sh = null;
+        switch (index) {
+            case 0:
+                sh = OpUtil.BREVENT_SH;
+                break;
+            case 1:
+                sh = OpUtil.ICEBOX_SH;
+                break;
+            case 2:
+                sh = OpUtil.STOPAPP_SH;
+                break;
+            case 3:
+                sh = OpUtil.PERMISSIONDOG_SH;
+                break;
+            default:
+        }
+        return sh;
+    }
+
+    private MyCallBack getMyCallBack(int index) {
+
+        return (exitCode, err) -> {
+            if (0 == exitCode) {
+                int stringId = R.string.unknown;
+                switch (index) {
+                    case 0:
+                        stringId = R.string.activate_brevent_success;
+                        break;
+                    case 1:
+                        stringId = R.string.activate_icebox_success;
+                        break;
+                    case 2:
+                        stringId = R.string.activate_stopapp_success;
+                        break;
+                    case 3:
+                        stringId = R.string.activate_permissiondog_success;
+                        break;
+                    default:
+                }
+                OpUtil.showToast0(context, stringId);
+            } else {
+                switch (index) {
+                    case 0:
+                        if ("sh: /data/data/me.piebridge.brevent/brevent.sh: No such file or directory".equals(err) ||
+                                "sh: /data/data/me.piebridge.brevent/brevent.sh: Permission denied".equals(err) ||
+                                "ERROR: please open Brevent to make a new brevent.sh".equals(err)) {
+                            OpUtil.showToast1(context, "请在黑阈内打开提示启动服务的界面后再尝试激活");
+                            return;
+                        }
+                        break;
+
+                    case 1:
+                        if ("sh: /sdcard/Android/data/com.catchingnow.icebox/files/start.sh: No such file or directory".equals(err) ||
+                                "sh: /sdcard/Android/data/com.catchingnow.icebox/files/start.sh: Permission denied".equals(err)) {
+                            OpUtil.showToast1(context, "请在冰箱内打开选择工作模式的界面后再尝试激活");
+                            return;
+                        }
+                        break;
+                    case 2:
+                        if ("sh: /storage/emulated/0/Android/data/web1n.stopapp/files/starter.sh: No such file or directory".equals(err) ||
+                                "sh: /storage/emulated/0/Android/data/web1n.stopapp/files/starter.sh: Permission denied".equals(err)) {
+                            OpUtil.showToast1(context, "请在小黑屋内打开提示启动服务的界面后再尝试激活");
+                            return;
+                        }
+                        break;
+                    case 3:
+                        if ("sh: /storage/emulated/0/Android/data/com.web1n.permissiondog/files/starter.sh: No such file or directory".equals(err) ||
+                                "sh: /storage/emulated/0/Android/data/com.web1n.permissiondog/files/starter.sh: Permission denied".equals(err)) {
+                            OpUtil.showToast1(context, "请在权限狗内打开提示启动服务的界面后再尝试激活");
+                            return;
+                        }
+                        break;
+                    default:
+                }
+                OpUtil.showToast1(context, String.format(MainFragment.this.getString(R.string.activate_fail), err));
+            }
+
+        };
+    }
+
+
     private void init() {
-        click2activate = getPreferenceManager().findPreference("click2activate");
+
+        Preferences = new Preference[prefStr.length];
+        PreferenceManager preferenceManager = getPreferenceManager();
+        for (int i = 0; i < prefStr.length; i++) {
+            Preferences[i] = preferenceManager.findPreference(prefStr[i]);
+            assert Preferences[i] != null;
+            int finalI = i;
+            Preferences[i].setOnPreferenceClickListener(preference -> {
+                execShizukuShell(finalI);
+                return true;
+            });
+        }
+
+
         avShizukuPreference = getPreferenceManager().findPreference("av_shizuku");
         shizuku_service = getPreferenceScreen().findPreference("shizuku_service");
         shizuku_permission = getPreferenceScreen().findPreference("shizuku_permission");
-
-        assert click2activate != null;
-        click2activate.setOnPreferenceClickListener(preference -> {
-            execShizukuShell(OpUtil.BREVENT_SH);
-            return true;
-        });
 
         assert shizuku_permission != null;
         shizuku_permission.setOnPreferenceClickListener(preference -> {
@@ -107,31 +198,25 @@ public class MainFragment extends PreferenceFragmentCompat {
     }
 
 
-    private void execShizukuShell(String shPath) {
+    private void execShizukuShell(int index) {
+        execShizukuShell(getSh(index), getMyCallBack(index));
+    }
+
+    private void execShizukuShell(String shPath, MyCallBack myCallBack) {
         try {
-            Shell.Result ShizukuShellResult;
+            Shell.Result shizukuShellResult;
 
-            ShizukuShellResult = ShizukuShell.getInstance().exec(new Shell.Command("sh", shPath));
+            shizukuShellResult = ShizukuShell.getInstance().exec("sh", shPath);
 
-            Log.e("Result", ShizukuShellResult.toString());
+            Log.e("Result", shizukuShellResult.toString());
 
-            if (0 == ShizukuShellResult.exitCode) {
-                OpUtil.showToast0(context, R.string.activate_success);
-            } else {
-                if ("sh: /data/data/me.piebridge.brevent/brevent.sh: No such file or directory".equals(ShizukuShellResult.err) ||
-                        "sh: /data/data/me.piebridge.brevent/brevent.sh: Permission denied".equals(ShizukuShellResult.err) ||
-                        "ERROR: please open Brevent to make a new brevent.sh".equals(ShizukuShellResult.err)) {
-                    OpUtil.showToast1(context, "请在黑阈内打开提示启动服务的界面后再尝试激活");
-
-                } else {
-                    OpUtil.showToast1(context, String.format(getString(R.string.activate_fail), ShizukuShellResult.err));
-                }
-            }
+            myCallBack.showResult(shizukuShellResult.exitCode, shizukuShellResult.err);
 
         } catch (Exception e) {
             OpUtil.showToast0(context, e + "");
         }
     }
+
 
     private void refreshStatus() {
 
@@ -170,14 +255,17 @@ public class MainFragment extends PreferenceFragmentCompat {
         }
 
         boolean avShizuku = ShizukuShell.getInstance().isAvailable();
-        click2activate.setEnabled(avShizuku);
+        for (Preference preference : Preferences) {
+            preference.setEnabled(avShizuku);
+        }
+
         if (avShizuku) {
             avShizukuPreference.setSummary(R.string.summary_av_ok_installer);
         } else {
             if (isShizukuRunningService) {
                 if (hasPermission) {
                     avShizukuPreference.setSummary(getString(R.string.summary_av_no) + getString(R.string.unknown));
-                    click2activate.setEnabled(true);
+                    activate_brevent.setEnabled(true);
                 } else {
                     if (isShizukuExist) {
                         avShizukuPreference.setOnPreferenceClickListener(preference -> {
@@ -239,6 +327,13 @@ public class MainFragment extends PreferenceFragmentCompat {
 //    private boolean isShExist() {
 //        return new File(getShPath()).exists();
 //    }
+
+    public interface MyCallBack {
+        /**
+         * 设置好时间后开始设置定时任务
+         */
+        void showResult(int exitCode, String err);
+    }
 
     private static class MyHandler extends Handler {
 
