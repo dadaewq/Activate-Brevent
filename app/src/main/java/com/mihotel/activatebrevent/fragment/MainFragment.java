@@ -28,20 +28,16 @@ import moe.shizuku.api.ShizukuService;
 
 
 /**
- * @author dadaewq
+ * @author dadaewq`
  */
 public class MainFragment extends PreferenceFragmentCompat {
 
     private static final int REQUEST_CODE = 2333;
     private final String[] prefStr = new String[]{"activate_brevent", "activate_icebox", "activate_stopapp", "activate_permissiondog"};
     private Preference[] Preferences;
-    private Preference activate_brevent, activate_icebox, activate_stopapp, activate_permissiondog;
-    private Preference shizuku_service;
-    private Preference shizuku_permission;
-    private Preference avShizukuPreference;
+    private Preference shizuku_service,shizuku_permission,avShizukuPreference;
     private Context context;
     private MyHandler mHandler;
-    private String command;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -265,7 +261,9 @@ public class MainFragment extends PreferenceFragmentCompat {
             if (isShizukuRunningService) {
                 if (hasPermission) {
                     avShizukuPreference.setSummary(getString(R.string.summary_av_no) + getString(R.string.unknown));
-                    activate_brevent.setEnabled(true);
+                    for (Preference preference : Preferences) {
+                        preference.setEnabled(true);
+                    }
                 } else {
                     if (isShizukuExist) {
                         avShizukuPreference.setOnPreferenceClickListener(preference -> {
