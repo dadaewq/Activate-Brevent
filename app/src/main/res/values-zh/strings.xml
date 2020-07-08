@@ -6,7 +6,7 @@
     <string name="summary_av_no">不可用！</string>
     <string name="summary_av_yes">可用</string>
     <string name="summary_av_ok_installer">现在可以使用</string>
-    <string name="summary_check_shizuku_service">检查Shizuku服务</string>
+    <string name="summary_check_shizuku_service">请检查Shizuku服务</string>
     <string name="summary_go_shizuku">点击前往Shizuku检查</string>
     <string name="title_installer_available_state">Shizuku可用状态</string>
     <string name="title_shizuku_service_state">Shizuku服务状态</string>
@@ -21,4 +21,5 @@
     <string name="activate_stopapp_success">执行成功，请前往小黑屋查看</string>
     <string name="activate_permissiondog_success">执行成功，请前往权限狗查看</string>
     <string name="activate_fail">执行失败,错误：\n%s</string>
+    <string name="get_shizuku">获取Shizuku</string>
 </resources>

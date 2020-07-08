@@ -15,6 +15,7 @@ import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
 
+import com.mihotel.activatebrevent.BuildConfig;
 import com.mihotel.activatebrevent.R;
 import com.mihotel.activatebrevent.util.OpUtil;
 import com.mihotel.activatebrevent.util.shell.Shell;
@@ -35,7 +36,7 @@ public class MainFragment extends PreferenceFragmentCompat {
     private static final int REQUEST_CODE = 2333;
     private final String[] prefStr = new String[]{"activate_brevent", "activate_icebox", "activate_stopapp", "activate_permissiondog"};
     private Preference[] Preferences;
-    private Preference shizuku_service,shizuku_permission,avShizukuPreference;
+    private Preference shizuku_service, shizuku_permission, avShizukuPreference;
     private Context context;
     private MyHandler mHandler;
 
@@ -164,6 +165,9 @@ public class MainFragment extends PreferenceFragmentCompat {
 
         Preferences = new Preference[prefStr.length];
         PreferenceManager preferenceManager = getPreferenceManager();
+
+        preferenceManager.findPreference("preferenceTitle").setTitle("v" + BuildConfig.VERSION_NAME);
+
         for (int i = 0; i < prefStr.length; i++) {
             Preferences[i] = preferenceManager.findPreference(prefStr[i]);
             assert Preferences[i] != null;
@@ -190,7 +194,6 @@ public class MainFragment extends PreferenceFragmentCompat {
             }
             return true;
         });
-
     }
 
 
@@ -257,7 +260,9 @@ public class MainFragment extends PreferenceFragmentCompat {
 
         if (avShizuku) {
             avShizukuPreference.setSummary(R.string.summary_av_ok_installer);
+            avShizukuPreference.setIcon(R.drawable.ic_passed);
         } else {
+            avShizukuPreference.setIcon(R.drawable.ic_warnning);
             if (isShizukuRunningService) {
                 if (hasPermission) {
                     avShizukuPreference.setSummary(getString(R.string.summary_av_no) + getString(R.string.unknown));

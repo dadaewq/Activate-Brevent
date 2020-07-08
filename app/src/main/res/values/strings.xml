@@ -6,7 +6,7 @@
     <string name="summary_av_no">Unavailable！</string>
     <string name="summary_av_yes">Available</string>
     <string name="summary_av_ok_installer">Available now</string>
-    <string name="summary_check_shizuku_service">Check Shizuku service</string>
+    <string name="summary_check_shizuku_service">Please check Shizuku service</string>
     <string name="summary_go_shizuku">Click to go to Shizuku to check</string>
     <string name="title_installer_available_state">Shizuku available state</string>
     <string name="title_shizuku_service_state">Shizuku service state</string>
@@ -21,4 +21,5 @@
     <string name="activate_stopapp_success">Execution succeed, please go to 小黑屋 to check</string>
     <string name="activate_permissiondog_success">Execution succeed, please go to 权限狗 to check</string>
     <string name="activate_fail">Execution failed, error：\n%s</string>
+    <string name="get_shizuku">Get Shizuku</string>
 </resources>

@@ -1,0 +1,10 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.mihotel.activatebrevent.activity.MainActivity">
+    <item
+        android:id="@+id/get_shizuku"
+        android:title="@string/get_shizuku"
+        app:showAsAction="never" />
+
+</menu>

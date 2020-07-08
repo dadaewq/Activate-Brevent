@@ -2,7 +2,10 @@ package com.mihotel.activatebrevent.util;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.net.Uri;
 import android.widget.Toast;
+
+import androidx.browser.customtabs.CustomTabsIntent;
 
 /**
  * @author dadaewq
@@ -32,4 +35,15 @@ public class OpUtil {
         Toast.makeText(context, stringId, Toast.LENGTH_SHORT).show();
     }
 
+    public static void launchCustomTabsUrl(Context context, String url) {
+        try {
+            CustomTabsIntent customTabsIntent = new CustomTabsIntent.Builder()
+                    .setShowTitle(true)
+                    .build();
+
+            customTabsIntent.launchUrl(context, Uri.parse(url));
+        } catch (Exception e) {
+            showToast1(context, "" + e);
+        }
+    }
 }
